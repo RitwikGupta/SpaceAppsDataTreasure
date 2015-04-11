@@ -1,5 +1,5 @@
 from collections import Counter
-from flask import render_template, url_for, redirect, flash, send_from_directory, request
+from flask import render_template, url_for, redirect, jsonify, request
 from datatreasure import datatreasure
 from keys import one, two, three, four
 import os
@@ -15,7 +15,6 @@ def index():
     return render_template("home.html")
 
 @datatreasure.route('/search', methods=['POST'])
-
 def search():
     keyword = request.form['keyword']
 
@@ -33,11 +32,13 @@ def search():
     			hashtag.append(i[1:])
     	else:
     		pass
-            
+
     str = ""
     for i in hashtag:
         str += i + " "
 
-    print Counter(hashtag)
+    jsonStr = json.dumps(Counter(hashtag))
 
-    return str
+    print jsonStr
+
+    return render_template("view.html", jsonStr=jsonStr, keyword=keyword)
