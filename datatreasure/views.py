@@ -6,6 +6,9 @@ import os
 import tweepy
 import re
 import json
+import random
+
+chars = '0123456789ABCDEF'
 
 @datatreasure.route('/')
 @datatreasure.route('/home')
@@ -33,12 +36,18 @@ def search():
     	else:
     		pass
 
-    str = ""
-    for i in hashtag:
-        str += i + " "
+    d = {}
+    [d.__setitem__(item,1+d.get(item,0)) for item in hashtag]
 
-    jsonStr = json.dumps(Counter(hashtag))
+    content = list()
+    for i in d.keys():
+        temp = {}
+        temp["datLabel"] = i
+        temp["value"] = d[i]
+        #temp["color"] = ['#'+''.join(sample(chars,6)) for i in range(6)]
+        temp["color"] = "#0C9F8F"
+        content.append(temp)
 
-    print jsonStr
+    print json.dumps(content)
 
-    return render_template("view.html", jsonStr=jsonStr, keyword=keyword)
+    return render_template("view.html", jsonStr=json.dumps(content), keyword=keyword)
