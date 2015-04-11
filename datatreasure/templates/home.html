@@ -1,4 +1,21 @@
+{% extends "skeleton/base.html" %}
+
+{% block header %}
+     {% include 'skeleton/default_header.html' %}
+{% endblock %}
+
+{% block footer %}
+     {% include 'skeleton/default_footer.html' %}
+{% endblock %}
+
+{% block title %}Date Treasures | Home{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
 {% block content %}
+
 <div class="container">
      <div class="row clearfix" id="splash-search">
           <div class="col-md-12">
@@ -9,7 +26,7 @@
                     <form id="keyword" class="text-center form-inline" role="form" action="/search" method="post">
                          <div class="input-group">
                               <input type="text" class="form-control typeahead" autocomplete="off"  placeholder="Enter Query" name="keyword">
-                              <input type="submit"/>
+                              <input class="btn btn-submit" type="submit"/>
                          </div>
                     </form>
                </div>
