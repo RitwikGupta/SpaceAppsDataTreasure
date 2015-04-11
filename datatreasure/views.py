@@ -1,3 +1,4 @@
+from collections import Counter
 from flask import render_template, url_for, redirect, flash, send_from_directory, request
 from datatreasure import datatreasure
 from keys import one, two, three, four
@@ -29,13 +30,14 @@ def search():
     	temp = re.findall(r'#\w+', tweet.text)
     	if temp:
     		for i in temp:
-    			hashtag.append(i)
+    			hashtag.append(i[1:])
     	else:
     		pass
-
-    print hashtag
+            
     str = ""
     for i in hashtag:
         str += i + " "
+
+    print Counter(hashtag)
 
     return str
