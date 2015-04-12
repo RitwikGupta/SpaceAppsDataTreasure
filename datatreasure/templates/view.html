@@ -9,24 +9,29 @@
 {% block head %} {{ super() }} {% endblock %}
 <!-- -->
 {% block content %}
-
-<html>
-
 <body>
+     <div id="tooltip" class="hidden">
+          <p>
+               <strong>Important Label Heading</strong>
+          </p>
+          <p>
+               <span id="value">100</span>%</p>
+     </div>
      <script src="http://d3js.org/d3.v3.min.js"></script>
+     <div class="container text-center chart">
      <script>
           var data = {{ jsonStr|safe }};
 
-          var width = 1600;
-          var height = 500;
+          var width = window.innerWidth;
+          var height = window.innerHeight - 200;
           var radius = Math.min(width, height) / 2;
 
           var color = d3.scale.ordinal()
-               .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+               .range(["#FB0012", "#D99800", "#0A30CD", "#1FE400", "#a05d56", "#d0743c", "#ff8c00"]);
 
           var arc = d3.svg.arc()
-               .outerRadius(radius - 10)
-               .innerRadius(radius - 70);
+               .outerRadius(radius)
+               .innerRadius(radius - 100);
 
           var pie = d3.layout.pie()
                .sort(null)
@@ -60,6 +65,23 @@
                .text(function(d) {
                     return d.data.datLabel;
                });
+
+         svg.append("text")
+        .attr("text-anchor", "middle")
+        .text("{{ num }} tweets")
+        .attr("style", "fill:black;font-size:18px;");
+
      </script>
+     </div>
+     <div class="row">
+       <div class="col-md-12 column text-center" style="margin-bottom:15px">
+         <form id="glob" class="text-center form-inline" role="form" action="/data" method="post">
+              <div class="input-group">
+                   <input type="hidden" class="form-control typeahead" name="glob" value="{{ jsonStr }}">
+                   <input style="margin-top:15px;" class="btn btn-submit" type="submit" value="Get JSON" />
+              </div>
+         </form>
+       </div>
+     </div>
 </body>
 {% endblock %}

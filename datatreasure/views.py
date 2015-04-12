@@ -13,7 +13,6 @@ chars = '0123456789ABCDEF'
 @datatreasure.route('/')
 @datatreasure.route('/home')
 @datatreasure.route('/home/')
-
 def index():
     return render_template("home.html")
 
@@ -25,19 +24,26 @@ def search():
     auth.set_access_token(three, four)
 
     api = tweepy.API(auth)
-
+    num = 500
     hashtag = list()
 
-    for tweet in tweepy.Cursor(api.search, q=keyword, count=100, lang="en").items(100):
+    for tweet in tweepy.Cursor(api.search, q=keyword, count=num, lang="en").items(num):
     	temp = re.findall(r'#\w+', tweet.text)
     	if temp:
     		for i in temp:
-    			hashtag.append(i[1:])
+    			hashtag.append(i[1:].lower())
     	else:
     		pass
 
     d = {}
     [d.__setitem__(item,1+d.get(item,0)) for item in hashtag]
+
+    if keyword.lower() in d:
+        del d[keyword.lower()]
+
+    for i in d.keys():
+        if d[i] < 10:
+            del d[i]
 
     content = list()
     for i in d.keys():
@@ -50,4 +56,12 @@ def search():
 
     print json.dumps(content)
 
-    return render_template("view.html", jsonStr=json.dumps(content), keyword=keyword)
+    return render_template("view.html", jsonStr=json.dumps(content), keyword=keyword, num=num)
+
+@datatreasure.route("/data", methods=['POST'])
+def data():
+    glob = request.form['glob']
+    print "DATA", glob
+    temp = {}
+    temp["data"] = glob
+    return jsonify(temp)
