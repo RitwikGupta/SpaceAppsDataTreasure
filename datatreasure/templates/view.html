@@ -65,7 +65,8 @@
                     .style("text-anchor", "middle")
                     .text(function(d) {
                          return d.data.datLabel;
-                    });
+                    })
+                    .on("click", function(d) { window.open("https://twitter.com/search?q=%23" + d.data.datLabel + "&src=typd"); });
 
                svg.append("text")
                     .attr("text-anchor", "middle")
